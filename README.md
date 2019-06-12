@@ -2,6 +2,8 @@
 
 > A vuejs implementation of 2048 game
 
+<img src="./sample.png">
+
 ## Project setup
 
 ```

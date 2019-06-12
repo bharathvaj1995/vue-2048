@@ -20,6 +20,64 @@ export default {
   components: {
     Header,
     Footer
+  },
+  data() {
+    return {
+      preference: {
+        size: 4
+      },
+      initalTiles: 2,
+      tileDmns: 124,
+      tilePos: 121,
+      tiles: [],
+      grid: []
+    };
+  },
+  created() {
+    this.resetDmns();
+  },
+  computed: {
+    gridDmns() {
+      return this.grid.length * this.tileDimension;
+    }
+  },
+  methods: {
+    resetDmns() {
+      const elem = document.documentElement;
+      const body = document.getElementsByTagName("body")[0];
+      const x = window.innerWidth || elem.clientWidth || body.clientWidth;
+      const y = window.innerHeight || elem.clientHeight || body.clientHeight;
+
+      if (x < 520) {
+        this.tileDimension = 69.5;
+        this.tilePosition = 67;
+      } else {
+        this.tileDimension = 124;
+        this.tilePosition = 121;
+      }
+    },
+    init() {
+      this.initGrid(this.preference.size);
+      this.clearMessage();
+
+      this.tiles = [];
+      // this.updateScore(0);
+
+      // for (var i = 0; i < this.initalTiles; i++) {
+      //   this.addRandomTile();
+      // }
+    },
+    initGrid(size) {
+      this.grid = Array(size)
+        .fill()
+        .map(() => Array(size).fill(0));
+    },
+    setMessage() {
+      alert("Set message");
+    },
+    clearMessage() {
+      alert("Clear message");
+    }
   }
 };
 </script>

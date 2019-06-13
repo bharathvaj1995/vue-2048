@@ -6,8 +6,9 @@
         Join the numbers and get to the
         <strong>2048 tile!</strong>
       </p>
-      <a>New Game</a>
+      <a @click="init">New Game</a>
     </div>
+    <GameContainer :tiles="tiles"/>
     <Footer/>
   </div>
 </template>
@@ -15,17 +16,18 @@
 <script>
 import Header from "./Header.vue";
 import Footer from "./Footer.vue";
+import GameContainer from "./GameContainer.vue";
+import { store, mutations } from "./../store";
+
 export default {
   name: "Wrapper",
   components: {
     Header,
+    GameContainer,
     Footer
   },
   data() {
     return {
-      preference: {
-        size: 4
-      },
       initalTiles: 2,
       tileDmns: 124,
       tilePos: 121,
@@ -44,18 +46,21 @@ export default {
       const tiles = [];
       const size = this.preference.size;
 
-      for (var x = 0; x < size; x++) {
-        for (var y = 0; y < size; y++) {
-          if (!grid[x][y]) {
-            cells.push({
-              x: x,
-              y: y
+      for (let x = 0; x < size; x++) {
+        for (let y = 0; y < size; y++) {
+          if (!this.grid[x][y]) {
+            tiles.push({
+              x,
+              y
             });
           }
         }
       }
 
-      return cells;
+      return tiles;
+    },
+    preference() {
+      return store.preference;
     }
   },
   methods: {
@@ -63,7 +68,6 @@ export default {
       const elem = document.documentElement;
       const body = document.getElementsByTagName("body")[0];
       const x = window.innerWidth || elem.clientWidth || body.clientWidth;
-      const y = window.innerHeight || elem.clientHeight || body.clientHeight;
 
       if (x < 520) {
         this.tileDimension = 69.5;
@@ -75,34 +79,55 @@ export default {
     },
     init() {
       this.initGrid(this.preference.size);
-      this.clearMessage();
 
       this.tiles = [];
-      // this.updateScore(0);
+      mutations.setScore(0);
+      this.clearMessage();
 
-      // for (var i = 0; i < this.initalTiles; i++) {
-      //   this.addRandomTile();
-      // }
+      let initalTiles = this.initalTiles;
+      while (initalTiles) {
+        this.addRandomTile();
+        initalTiles -= 1;
+      }
     },
     initGrid(size) {
       this.grid = Array(size)
         .fill()
         .map(() => Array(size).fill(0));
     },
-    setMessage() {
-      alert("Set message");
+    addTile(tile = {}) {
+      this.tiles.push({
+        x: tile.x,
+        y: tile.y,
+        value: tile.value,
+        isMerged: tile.isMerged
+      });
+      this.grid[tile.x][tile.y] = 1;
     },
-    clearMessage() {
-      alert("Clear message");
+    addRandomTile() {
+      if (this.availableTiles.length > 0) {
+        const value = Math.random() < 0.9 ? 2 : 4; // TODO move to constants
+        const randomTile = this.randomAvailableTile();
+
+        this.addTile({
+          x: randomTile.x,
+          y: randomTile.y,
+          value: value,
+          isMerged: false
+        });
+      }
     },
-    randomAvailableTiles() {
-      const availableTiles = this.availableCells;
+    randomAvailableTile() {
+      const availableTiles = this.availableTiles;
 
       if (availableTiles.length) {
         return availableTiles[
           Math.floor(Math.random() * availableTiles.length)
         ];
       }
+    },
+    clearMessage() {
+      mutations.setNotification({});
     }
   }
 };

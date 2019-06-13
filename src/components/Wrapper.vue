@@ -39,6 +39,23 @@ export default {
   computed: {
     gridDmns() {
       return this.grid.length * this.tileDimension;
+    },
+    availableTiles() {
+      const tiles = [];
+      const size = this.preference.size;
+
+      for (var x = 0; x < size; x++) {
+        for (var y = 0; y < size; y++) {
+          if (!grid[x][y]) {
+            cells.push({
+              x: x,
+              y: y
+            });
+          }
+        }
+      }
+
+      return cells;
     }
   },
   methods: {
@@ -77,6 +94,15 @@ export default {
     },
     clearMessage() {
       alert("Clear message");
+    },
+    randomAvailableTiles() {
+      const availableTiles = this.availableCells;
+
+      if (availableTiles.length) {
+        return availableTiles[
+          Math.floor(Math.random() * availableTiles.length)
+        ];
+      }
     }
   }
 };

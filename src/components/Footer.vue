@@ -1,23 +1,37 @@
-<template>
+<template functional>
   <div class="footer">
-    <p>
-      <strong class="important">How to play:</strong> Use your
-      <strong>arrow keys</strong> to move the tiles. When two
-      tiles with the same number touch, they
-      <strong>merge into one!</strong>
-    </p>
+    <strong>How to play:</strong>
+    <ul>
+      <li>
+        Use your
+        <strong>arrow keys</strong> to move the tiles.
+      </li>
+      <li>
+        Use your
+        <strong>voice command</strong> to move the tiles.
+        (UP / DOWN / LEFT / RIGHT)
+      </li>
+    </ul>
 
     <hr>
 
     <p>
-      <strong class="important">CREDITS:</strong>&nbsp;2048 by
+      <strong>CREDITS:</strong>&nbsp;2048 by
       <a href="http://gabrielecirulli.com" target="_blank">Gabriele Cirulli.</a>
     </p>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  name: "game-footer",
+  props: {
+    isSpeechSupported: {
+      type: Boolean,
+      value: false
+    }
+  }
+};
 </script>
 
 <style scoped>

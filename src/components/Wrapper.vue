@@ -9,7 +9,7 @@
       <a @click="init">New Game</a>
     </div>
     <GameContainer :dmns="gridDmns" :tiles="tiles" :grid="grid" :tile-position="tilePosition"/>
-    <Footer/>
+    <Footer :isSpeechSupported="isSpeechSupported"/>
   </div>
 </template>
 
@@ -18,6 +18,7 @@ import Header from "./Header.vue";
 import Footer from "./Footer.vue";
 import GameContainer from "./GameContainer.vue";
 import KeyboardListenner from "../utils/keys.js";
+import SpeechListenner from "../utils/speech.js";
 import { store, mutations } from "./../store";
 import { type } from "os";
 
@@ -34,7 +35,8 @@ export default {
       tileDmns: 124,
       tilePos: 121,
       tiles: [],
-      grid: []
+      grid: [],
+      isSpeechSupported: false
     };
   },
   created() {
@@ -45,6 +47,9 @@ export default {
     const keyboardListenner = new KeyboardListenner();
     keyboardListenner.on("move", this.move);
     keyboardListenner.on("restart", this.restart);
+
+    this.speechInit();
+
     window.onbeforeunload = event => {
       const msg = (event.returnValue = "Do you want to play again ?");
       return "Do you want to play again ?";
@@ -75,6 +80,20 @@ export default {
     }
   },
   methods: {
+    speechInit() {
+      const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        this.isSpeechSupported = true;
+        let speechListenner = new SpeechListenner(SpeechRecognition);
+        speechListenner.start();
+        speechListenner.onCommand(this.move);
+        speechListenner.recognition.onspeechend = () => {
+          speechListenner = null;
+          this.speechInit();
+        };
+      }
+    },
     availableTiles() {
       const tiles = [];
       const size = this.preference.size;
@@ -174,7 +193,7 @@ export default {
         } // Left
       };
 
-      return map[direction];
+      return map[direction] || map[0];
     },
     withinBounds(position) {
       const size = this.preference.size;
@@ -326,6 +345,7 @@ export default {
       return traversals;
     },
     move(direction) {
+      // this.speechInit();
       const vector = this.getDirVector(direction);
       const traversals = this.buildTraversals(vector);
       let moved = false;

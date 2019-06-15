@@ -1,19 +1,30 @@
-<template functional>
+<template>
   <div
-    :class="`tile tile-${props.data.value} tile-new ${props.data.isMerged ? ' tile-merged' : ''}`"
+    :class="`tile tile-${data.value} ${data.isNew ? ' tile-new' : ''} ${data.isMerged ? ' tile-merged' : ''}`"
+    :style="{ transform: 'translate(' + calcStyleX(data.x) + 'px,' + calcStyleY(data.y) + 'px)'}"
   >
-    <div class="tile-inner">{{props.data.value}}</div>
+    <div class="tile-inner">{{data.value}}</div>
   </div>
 </template>
 
 <script>
 export default {
   name: "Tile",
-  props: ["data"]
+  props: ["data"],
+
+  methods: {
+    calcStyleX(x) {
+      return this.$parent.tilePosition * x;
+    },
+
+    calcStyleY(y) {
+      return this.$parent.tilePosition * y;
+    }
+  }
 };
 </script>
 
-<style scoped>
+<style>
 .tile,
 .tile .tile-inner {
   width: 107px;
@@ -71,11 +82,7 @@ export default {
     inset 0 0 0 1px rgba(255, 255, 255, 0.14286);
   font-size: 45px;
 }
-@media screen and (max-width: 520px) {
-  .tile.tile-128 .tile-inner {
-    font-size: 25px;
-  }
-}
+
 .tile.tile-256 .tile-inner {
   color: #f9f6f2;
   background: #edcc61;
@@ -83,11 +90,7 @@ export default {
     inset 0 0 0 1px rgba(255, 255, 255, 0.19048);
   font-size: 45px;
 }
-@media screen and (max-width: 520px) {
-  .tile.tile-256 .tile-inner {
-    font-size: 25px;
-  }
-}
+
 .tile.tile-512 .tile-inner {
   color: #f9f6f2;
   background: #edc850;
@@ -95,11 +98,7 @@ export default {
     inset 0 0 0 1px rgba(255, 255, 255, 0.2381);
   font-size: 45px;
 }
-@media screen and (max-width: 520px) {
-  .tile.tile-512 .tile-inner {
-    font-size: 25px;
-  }
-}
+
 .tile.tile-1024 .tile-inner {
   color: #f9f6f2;
   background: #edc53f;
@@ -107,11 +106,7 @@ export default {
     inset 0 0 0 1px rgba(255, 255, 255, 0.28571);
   font-size: 35px;
 }
-@media screen and (max-width: 520px) {
-  .tile.tile-1024 .tile-inner {
-    font-size: 15px;
-  }
-}
+
 .tile.tile-2048 .tile-inner {
   color: #f9f6f2;
   background: #edc22e;
@@ -119,19 +114,51 @@ export default {
     inset 0 0 0 1px rgba(255, 255, 255, 0.33333);
   font-size: 35px;
 }
-@media screen and (max-width: 520px) {
-  .tile.tile-2048 .tile-inner {
-    font-size: 15px;
-  }
-}
+
 .tile.tile-super .tile-inner {
   color: #f9f6f2;
   background: #3c3a32;
   font-size: 30px;
 }
+
+@keyframes appear {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.tile-new .tile-inner {
+  animation: appear 200ms ease 100ms;
+  animation-fill-mode: backwards;
+}
+
 @media screen and (max-width: 520px) {
-  .tile.tile-super .tile-inner {
-    font-size: 10px;
+  .tile,
+  .tile .tile-inner {
+    width: 60px;
+    height: 60px;
+    line-height: 67.5px;
+  }
+
+  .tile .tile-inner {
+    font-size: 35px;
+  }
+
+  .tile.tile-128 .tile-inner {
+    font-size: 25px;
+  }
+
+  .tile.tile-256 .tile-inner {
+    font-size: 25px;
+  }
+
+  .tile.tile-1024 .tile-inner {
+    font-size: 15px;
   }
 }
 </style>

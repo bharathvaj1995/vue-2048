@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue from "vue";
 
 export const store = Vue.observable({
   preference: {
@@ -8,10 +8,7 @@ export const store = Vue.observable({
     currScore: 0,
     bestScore: 0
   },
-  notification: {
-    message: '',
-    type: ''
-  }
+  message: ""
 });
 
 export const mutations = {
@@ -27,12 +24,10 @@ export const mutations = {
   },
   setBestScore() {
     const stats = store.stats;
-    stats.bestScore = stats.currScore >= stats.bestScore ? stats.currScore : stats.bestScore;
+    stats.bestScore =
+      stats.currScore >= stats.bestScore ? stats.currScore : stats.bestScore;
   },
-  setNotification({ message = '', type = 'info' }) {
-    store.notification = {
-      message,
-      type
-    };
+  setMessage({ message = "" }) {
+    store.message = message;
   }
 };

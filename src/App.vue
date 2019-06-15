@@ -6,7 +6,6 @@
 
 <script>
 import Wrapper from "./components/Wrapper.vue";
-
 export default {
   name: "app",
   components: {
@@ -27,5 +26,11 @@ body {
 
 body {
   margin: 80px 0;
+}
+
+@media screen and (max-width: 520px) {
+  body {
+    margin: 40px 0;
+  }
 }
 </style>

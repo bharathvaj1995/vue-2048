@@ -6,11 +6,6 @@
       tiles with the same number touch, they
       <strong>merge into one!</strong>
     </p>
-    <hr>
-
-    <p>
-      <strong class="important">NOTE:</strong> This game was written using Vue 2
-    </p>
 
     <hr>
 

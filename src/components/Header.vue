@@ -34,6 +34,12 @@ export default {
   margin: 0;
 }
 
+@media screen and (max-width: 520px) {
+  .title {
+    font-size: 4rem;
+  }
+}
+
 .score_container {
   display: flex;
 }

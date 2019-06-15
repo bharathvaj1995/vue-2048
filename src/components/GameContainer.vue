@@ -1,31 +1,30 @@
 <template>
-  <div class="game-container" :style="{width:`${dmns}px`, height: `${dmns}px`}">
-    <Message/>
-    <div class="grid-container">
-      <div v-for="(row,rowKey) in grid" :key="rowKey" class="grid-row">
-        <div v-for="(col,colKey) in row" :key="colKey" class="grid-cell"></div>
+  <div class="container">
+    <div class="game-container" :style="{width:`${dmns}px`, height: `${dmns}px`}">
+      <div class="grid-container">
+        <div v-for="(row,rowKey) in grid" :key="rowKey" class="grid-row">
+          <div v-for="(col,colKey) in row" :key="colKey" class="grid-cell"></div>
+        </div>
       </div>
-    </div>
 
-    <div class="tile-container">
-      <Tile
-        v-for="tile in tiles"
-        :key="`${tile.value}-${tile.x}-${tile.y}-${Math.random()}`"
-        :data="tile"
-      />
+      <div class="tile-container">
+        <Tile
+          v-for="tile in tiles"
+          :key="`${tile.value}-${tile.x}-${tile.y}-${Math.random()}`"
+          :data="tile"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import Tile from "./Tile.vue";
-import Message from "./Message.vue";
 
 export default {
   name: "GameContainer",
   components: {
-    Tile,
-    Message
+    Tile
   },
   props: {
     tiles: {
@@ -39,6 +38,10 @@ export default {
     grid: {
       type: Array,
       default: () => []
+    },
+    tilePosition: {
+      type: Number,
+      default: 0
     }
   }
 };
@@ -87,5 +90,23 @@ export default {
 }
 .grid-cell:last-child {
   margin-right: 0;
+}
+
+@media screen and (max-width: 520px) {
+  .grid-cell {
+    width: 60px;
+    height: 60px;
+    margin-right: 15px;
+    border-radius: 3px;
+    background: rgba(238, 228, 218, 0.35);
+  }
+  .grid-cell:last-child {
+    margin-right: 0;
+  }
+}
+
+.container {
+  display: flex;
+  justify-content: center;
 }
 </style>

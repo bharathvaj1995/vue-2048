@@ -1,14 +1,16 @@
 <template>
-  <div class="wrapper" ref="wrapper">
+  <div class="wrapper">
     <Header :score="stats.currScore" :best-score="stats.bestScore"/>
     <div class="description">
       <p>
         Join the numbers and get to the
         <strong>2048 tile!</strong>
       </p>
-      <a @click="init">New Game</a>
+      <div id="new-game" @click="init">New Game</div>
     </div>
-    <GameContainer :dmns="gridDmns" :tiles="tiles" :grid="grid" :tile-position="tilePosition"/>
+    <div ref="game">
+      <GameContainer :dmns="gridDmns" :tiles="tiles" :grid="grid" :tile-position="tilePosition"/>
+    </div>
     <Footer :isSpeechSupported="isSpeechSupported"/>
   </div>
 </template>
@@ -36,7 +38,8 @@ export default {
       tilePos: 121,
       tiles: [],
       grid: [],
-      isSpeechSupported: false
+      isSpeechSupported: false,
+      isGameOver: false
     };
   },
   created() {
@@ -65,7 +68,7 @@ export default {
       return store.stats;
     },
     message() {
-      return this.preference.message;
+      return store.message;
     }
   },
   watch: {
@@ -80,7 +83,7 @@ export default {
   },
   methods: {
     touchInit() {
-      swipeListenner(document.getElementById("app"), this.move);
+      swipeListenner(this.$refs.game, this.move);
     },
     keyBoardInit() {
       const keyboardListenner = new KeyboardListenner();
@@ -217,7 +220,7 @@ export default {
         return null;
       } else {
         return this.tiles.find(
-          (item, index) => item.x === position.x && item.y === position.y
+          item => item.x === position.x && item.y === position.y
         );
       }
     },
@@ -234,7 +237,7 @@ export default {
         return true;
       }
     },
-    mergeTiles(curr, next, position) {
+    mergeTiles(curr, next) {
       next.value *= 2;
       next.isMerged = true;
 
@@ -359,6 +362,7 @@ export default {
       }
       const traversals = this.buildTraversals(vector);
       let moved = false;
+      let gameover = true;
 
       traversals.x.forEach(x => {
         traversals.y.forEach(y => {
@@ -382,18 +386,19 @@ export default {
             } else {
               moved = this.moveTile(tile, positions.farthest);
             }
+          } else {
+            gameover = false;
           }
         });
       });
 
+      this.isGameOver = gameover;
+      if (this.isGameOver && !this.tileMatchesAvailable()) {
+        mutations.setMessage("Game Over! You Lost");
+      }
+
       if (moved) {
         this.addRandomTile();
-
-        if (this.grid.toString().indexOf("0") === -1) {
-          if (!this.tileMatchesAvailable()) {
-            mutations.setMessage("Game Over! You Lost");
-          }
-        }
       }
     },
     clearMessage() {
@@ -423,7 +428,7 @@ export default {
   }
 }
 
-a {
+#new-game {
   display: inline-block;
   background: #8f7a66;
   border-radius: 3px;

@@ -27,7 +27,7 @@ export const mutations = {
     stats.bestScore =
       stats.currScore >= stats.bestScore ? stats.currScore : stats.bestScore;
   },
-  setMessage({ message = "" }) {
+  setMessage(message = "") {
     store.message = message;
   }
 };

@@ -47,6 +47,8 @@ export default {
   border-radius: 4px;
   padding: 8px 16px;
   text-align: center;
+}
+.score:not(:last-child) {
   margin-right: 8px;
 }
 

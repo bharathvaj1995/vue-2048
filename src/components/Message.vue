@@ -1,10 +1,12 @@
 <template>
   <div class="message">
-    <p>{{message}}</p>
-    <div class="lower">
-      <a class="keep-playing-button" @click="clearMessage">Keep going</a>
-      <a class="retry-button" @click="$emit('try_again')">Try again</a>
-    </div>
+    <template v-if="message">
+      <p>{{message}}</p>
+      <div class="lower">
+        <a class="keep-playing-button" @click="clearMessage">Keep going</a>
+        <a class="retry-button" @click="$emit('try_again')">Try again</a>
+      </div>
+    </template>
   </div>
 </template>
 

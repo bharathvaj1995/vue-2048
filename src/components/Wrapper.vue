@@ -8,7 +8,7 @@
       </p>
       <a @click="init">New Game</a>
     </div>
-    <GameContainer :tiles="tiles"/>
+    <GameContainer :dmns="gridDmns" :tiles="tiles" :grid="grid"/>
     <Footer/>
   </div>
 </template>
@@ -37,6 +37,7 @@ export default {
   },
   created() {
     this.resetDmns();
+    this.init();
   },
   computed: {
     gridDmns() {
@@ -135,7 +136,7 @@ export default {
 
 <style scoped>
 .wrapper {
-  position: fixed;
+  position: absolute;
   left: 50%;
   transform: translateX(-50%);
 }

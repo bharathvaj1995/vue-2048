@@ -8,9 +8,10 @@
 
 - Supports Voice Commands
 - Supports Keyboard
+- Supports touch interface
 
 ### TODO
 
 - [x] Keyboard
 - [x] Speech recognition
-- [ ] Touch Support
+- [x] Touch Support

@@ -96,7 +96,7 @@ export default {
   background: #edc850;
   box-shadow: 0 0 30px 10px rgba(243, 215, 116, 0.39683),
     inset 0 0 0 1px rgba(255, 255, 255, 0.2381);
-  font-size: 45px;
+  font-size: 30px;
 }
 
 .tile.tile-1024 .tile-inner {
@@ -158,7 +158,7 @@ export default {
   }
 
   .tile.tile-1024 .tile-inner {
-    font-size: 15px;
+    font-size: 21px;
   }
 }
 </style>

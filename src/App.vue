@@ -24,6 +24,11 @@ body {
   font-size: 16px;
 }
 
+#app {
+  height: 100vh;
+  width: 100%;
+}
+
 body {
   margin: 80px 0;
 }

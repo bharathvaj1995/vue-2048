@@ -14,18 +14,19 @@ export default class SpeechListenner {
 
   init() {
     this.recognition.onstart = () => {
-      console.log(
+      console.info(
         "Voice recognition activated. Try speaking into the microphone."
       );
     };
     this.recognition.onerror = () => {
-      this.alertUser("No speech was detected. Try again.");
+      console.warn(
+        "Voice recognition activated. Try speaking into the microphone."
+      );
     };
     this.recognition.onresult = event => {
       const current = event.resultIndex;
       const command = event.results[current][0].transcript || "";
       if (command) {
-        console.log(command, SPEECH_MAP[command.toUpperCase()]);
         this.callback(SPEECH_MAP[command.toUpperCase()]);
       }
     };

@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper" ref="wrapper">
     <Header :score="stats.currScore" :best-score="stats.bestScore"/>
     <div class="description">
       <p>
@@ -19,8 +19,8 @@ import Footer from "./Footer.vue";
 import GameContainer from "./GameContainer.vue";
 import KeyboardListenner from "../utils/keys.js";
 import SpeechListenner from "../utils/speech.js";
+import swipeListenner from "../utils/swipe.js";
 import { store, mutations } from "./../store";
-import { type } from "os";
 
 export default {
   name: "Wrapper",
@@ -44,14 +44,13 @@ export default {
     this.init();
   },
   mounted() {
-    const keyboardListenner = new KeyboardListenner();
-    keyboardListenner.on("move", this.move);
-    keyboardListenner.on("restart", this.restart);
-
+    this.keyBoardInit();
+    this.touchInit();
     this.speechInit();
 
     window.onbeforeunload = event => {
-      const msg = (event.returnValue = "Do you want to play again ?");
+      const msg = "Do you want to play again ?";
+      event.returnValue = msg;
       return "Do you want to play again ?";
     };
   },
@@ -80,6 +79,14 @@ export default {
     }
   },
   methods: {
+    touchInit() {
+      swipeListenner(document.getElementById("app"), this.move);
+    },
+    keyBoardInit() {
+      const keyboardListenner = new KeyboardListenner();
+      keyboardListenner.on("move", this.move);
+      keyboardListenner.on("restart", this.restart);
+    },
     speechInit() {
       const SpeechRecognition =
         window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -193,7 +200,7 @@ export default {
         } // Left
       };
 
-      return map[direction] || map[0];
+      return map[direction];
     },
     withinBounds(position) {
       const size = this.preference.size;
@@ -347,6 +354,9 @@ export default {
     move(direction) {
       // this.speechInit();
       const vector = this.getDirVector(direction);
+      if (!vector) {
+        return;
+      }
       const traversals = this.buildTraversals(vector);
       let moved = false;
 
